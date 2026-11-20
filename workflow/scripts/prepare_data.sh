@@ -15,7 +15,7 @@ declare -A SAMPLES=(
 for sample in "${!SAMPLES[@]}"; do
   srx="${SAMPLES[$sample]}"
   echo "Fetching URLs for $sample ($srx)..."
-  urls=$(curl -s "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=${srx}&result=read_run&fields=fastq_ftp" | tail -n 1)
+  urls=$(curl -s "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=${srx}&result=read_run&fields=fastq_ftp" | tail -n 1 | cut -f2)
   
   IFS=';' read -ra ADDR <<< "$urls"
   url1="https://${ADDR[0]}"
