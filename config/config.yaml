@@ -1,0 +1,14 @@
+samples:
+  - N61311_Dex
+  - N052611_untreated
+  - N080611_untreated
+  - N080611_Alb
+
+raw_dir: "data/raw"
+
+ref:
+  genome: "resources/GRCh38.primary_assembly.genome.fa"
+  gtf: "resources/gencode.v47.primary_assembly.annotation.gtf"
+  transcripts: "resources/gencode.v47.transcripts.fa"
+
+threads: 4
