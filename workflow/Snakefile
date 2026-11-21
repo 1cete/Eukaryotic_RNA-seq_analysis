@@ -22,7 +22,7 @@ rule fastqc_raw:
     conda: "envs/qc.yaml"
     log: "logs/fastqc_raw/{sample}.log"
     shell:
-        "fastqc -t {threads} -o results/qc/raw {input.r1} {input.r2} &> {log}"
+        "fastqc -t {threads} --outdir results/qc/raw {input.r1} {input.r2} &> {log}"
 
 rule fastp:
     input:
@@ -58,4 +58,4 @@ rule fastqc_trimmed:
     conda: "envs/qc.yaml"
     log: "logs/fastqc_trimmed/{sample}.log"
     shell:
-        "fastqc -t {threads} -o results/qc/trimmed {input.r1} {input.r2} &> {log}"
+        "fastqc -t {threads} --outdir results/qc/trimmed {input.r1} {input.r2} &> {log}"
