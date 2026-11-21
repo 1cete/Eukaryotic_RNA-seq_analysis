@@ -213,7 +213,7 @@ rule rseqc_genebody:
     shell:
         """
         BAMS=$(echo {input.bams} | tr ' ' ',')
-        geneBody_coverage.py -r {input.mane_bed} -i $BAMS -o {params.prefix} &> {log}
+        head -n 2000 {input.mane_bed} > results/qc/align/genes_mane_2k.bed && geneBody_coverage.py -r results/qc/align/genes_mane_2k.bed -i $BAMS -o {params.prefix} &> {log}
         """
 
 rule deeptools_summary:
