@@ -19,7 +19,8 @@ rule all:
         expand("results/qc/align/rseqc/{sample}.inner_distance_freq.txt", sample=SAMPLES),
         "results/qc/align/rseqc/genebody.geneBodyCoverage.txt",
         "results/qc/align/deeptools/correlation_heatmap.png",
-        "results/qc/align/deeptools/pca.png"
+        "results/qc/align/deeptools/pca.png",
+        "results/multiqc/multiqc_report.html"
 
 # Read preprocessing
 
@@ -244,4 +245,30 @@ rule deeptools_plots:
         """
         plotCorrelation -in {input.npz} --corMethod pearson --whatToPlot heatmap --plotNumbers -o {output.corr} --outFileCorMatrix {output.corr_tab} &> {log}
         plotPCA -in {input.npz} -o {output.pca} --outFileNameData {output.pca_tab} &>> {log}
+        """
+
+
+rule multiqc:
+    input:
+        expand("results/qc/raw/{sample}_{read}_fastqc.html", sample=SAMPLES, read=[1, 2]),
+        expand("results/qc/trimmed/{sample}_{read}.trimmed_fastqc.html", sample=SAMPLES, read=[1, 2]),
+        "results/counts/featurecounts.txt",
+        expand("results/kallisto/{sample}/abundance.tsv", sample=SAMPLES),
+        expand("results/qc/align/rseqc/{sample}.bam_stat.txt", sample=SAMPLES),
+        expand("results/qc/align/rseqc/{sample}.infer_experiment.txt", sample=SAMPLES),
+        expand("results/qc/align/rseqc/{sample}.read_distribution.txt", sample=SAMPLES),
+        expand("results/qc/align/rseqc/{sample}.inner_distance_freq.txt", sample=SAMPLES),
+        "results/qc/align/rseqc/genebody.geneBodyCoverage.txt",
+        "results/qc/align/deeptools/correlation_heatmap.png",
+        "results/qc/align/deeptools/pca.png"
+    output:
+        "results/multiqc/multiqc_report.html"
+    log:
+        "logs/multiqc/multiqc.log"
+    conda:
+        "envs/multiqc.yaml"
+    shell:
+        """
+        mkdir -p results/multiqc logs/multiqc
+        multiqc results logs -o results/multiqc -f &> {log}
         """
